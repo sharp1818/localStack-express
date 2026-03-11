@@ -1,6 +1,12 @@
-export const fetchUsers = async () => {
-  return [
-    { id: 1, name: "Juan", email: "juan@mail.com" },
-    { id: 2, name: "Ana", email: "ana@mail.com" },
-  ];
+import { ScanCommand } from "@aws-sdk/lib-dynamodb";
+import docClient from "../config/db.js";
+
+export const getAllUsersService = async () => {
+  const command = new ScanCommand({
+    TableName: "Users",
+    ProjectionExpression: "id, nombre, apellido, email, fechaNacimiento, createdAt"
+  });
+
+  const { Items } = await docClient.send(command);
+  return Items;
 };
